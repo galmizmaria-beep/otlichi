@@ -1,0 +1,2 @@
+'use strict';
+self.onmessage=async({data})=>{try{const bitmap=await createImageBitmap(data.file);const ratio=Math.min(1,1600/Math.max(bitmap.width,bitmap.height));const canvas=new OffscreenCanvas(Math.max(1,Math.round(bitmap.width*ratio)),Math.max(1,Math.round(bitmap.height*ratio)));canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);const blob=await canvas.convertToBlob({type:'image/webp',quality:.85});bitmap.close();self.postMessage({blob:blob.size<data.file.size||ratio<1?blob:data.file})}catch(error){self.postMessage({error:error.message})}};

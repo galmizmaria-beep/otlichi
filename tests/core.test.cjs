@@ -1,0 +1,16 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const vm = require('node:vm');
+const fs = require('node:fs');
+const context = vm.createContext({ console });
+vm.runInContext(fs.readFileSync(require('node:path').join(__dirname, '../js/core.js'), 'utf8'), context);
+const C = context.DiffCore;
+const plain = v => JSON.parse(JSON.stringify(v));
+function validProject(n=1){const p=C.project();p.images.a=p.images.b={source:'data:image/png;base64,a',naturalWidth:800,naturalHeight:600};for(let i=0;i<n;i++){const id=C.uid(),t=C.task(id);t.question='2 + 2?';t.answers=['4','5'];p.tasks.push(t);p.differences.push({id,shape:'ellipse',x:.5,y:.5,w:.2,h:.2,linkedTaskId:t.id,difficulty:'normal'});}return p;}
+test('1, 5, 10, 20 differences have exactly one task each',()=>{for(const n of [1,5,10,20]){const p=validProject(n);assert.equal(p.tasks.length,n);assert.equal(C.validate(p).length,0)}});
+test('ellipse, rectangle and polygon use normalized hit testing',()=>{const d={shape:'ellipse',x:.5,y:.5,w:.2,h:.4};assert.equal(C.hit(d,.5,.5),true);assert.equal(C.hit(d,.61,.5),false);d.shape='rect';assert.equal(C.hit(d,.59,.69),true);d.shape='polygon';d.points=[[.1,.1],[.9,.1],[.5,.9]];assert.equal(C.hit(d,.5,.3),true);assert.equal(C.hit(d,.1,.8),false)});
+test('all five answer types accept correct and reject incorrect answers',()=>{const t=C.task('a');assert.equal(C.check(t,[0]),true);assert.equal(C.check(t,[1]),false);t.type='multiple';t.correctIndexes=[0,2];assert.equal(C.check(t,[2,0]),true);assert.equal(C.check(t,[0]),false);t.type='input';t.acceptedInputs=['Ёж  идёт'];assert.equal(C.check(t,'  еж идёт  '),true);assert.equal(C.check(t,'кот'),false);t.type='oral';assert.equal(C.check(t,true),true);assert.equal(C.check(t,false),false);t.type='order';t.orderItems=['a','b','c'];assert.equal(C.check(t,[0,1,2]),true);assert.equal(C.check(t,[1,0,2]),false)});
+test('validation catches unassigned and malformed tasks',()=>{const p=validProject();p.tasks[0].question='';assert.ok(C.validate(p).length);p.tasks=[];assert.ok(C.validate(p).length>=2);const q=validProject();q.tasks[0].correctIndexes=[99];assert.ok(C.validate(q).length)});
+test('project round trip preserves resources and settings',()=>{const p=validProject(5);p.locale='ar';p.hud.lives=1;assert.deepEqual(plain(C.migrate(JSON.parse(JSON.stringify(p)))),plain(p));const old=plain(p);old.schemaVersion=0;assert.equal(C.migrate(old).schemaVersion,1)});
+test('unknown schemas and invalid coordinates are rejected',()=>{assert.throws(()=>C.migrate({schemaVersion:99}));const p=validProject();p.differences[0].x=2;assert.throws(()=>C.migrate(p));const q=validProject();q.differences.push({...q.differences[0]});assert.throws(()=>C.migrate(q))});
+test('export escaping protects script and HTML boundaries',()=>{assert.equal(C.safe('<script>"&'), '&lt;script&gt;&quot;&amp;');assert.equal(Object.keys(C.locales).length,27)});
