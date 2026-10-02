@@ -28,7 +28,7 @@ jobs:
       - run: |
           mkdir public
           cp index.html style.css public/
-          cp -r js public/
+          cp -r js assets vendor public/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
