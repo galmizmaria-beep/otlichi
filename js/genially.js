@@ -18,8 +18,8 @@ async function optimize(project){
  const cache=new Map();for(const [obj,key] of refs){const source=obj[key];if(!source)continue;if(!cache.has(source))cache.set(source,await compressPicture(source));obj[key]=cache.get(source)}
  return copy;
 }
-function iframe(html,title,ratio='4/3'){const E=root.DiffCore.safe;return `<iframe title="${E(title)}" style="width:100%;aspect-ratio:${root.DiffCore.frameRatio(ratio)};border:0" sandbox="allow-scripts" srcdoc="${E(html)}"></iframe>`}
-async function pack(html,title,ratio='4/3'){
+function iframe(html,title,ratio='16/9'){const E=root.DiffCore.safe;return `<iframe title="${E(title)}" style="width:100%;aspect-ratio:${root.DiffCore.frameRatio(ratio)};border:0" sandbox="allow-scripts" srcdoc="${E(html)}"></iframe>`}
+async function pack(html,title,ratio='16/9'){
  const raw=iframe(html,title,ratio);if(typeof CompressionStream==='undefined')return {code:raw,packed:false};
  const stream=new Blob([html]).stream().pipeThrough(new CompressionStream('gzip'));
  const bytes=new Uint8Array(await new Response(stream).arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));

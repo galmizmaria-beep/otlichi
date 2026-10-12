@@ -45,7 +45,7 @@ aside img { max-width:100%; max-height:110px; object-fit:contain; display:block;
 .preview-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
 .toolbar select { width:auto; max-width:170px; }
 .toolbar button { font-size:12px; }
-#preview-wrap { position:relative; width:100%; aspect-ratio:4/3; background:#fffdf6; border:4px solid #fffdf3; border-radius:22px; overflow:hidden; box-shadow:0 12px 35px #57634712,0 0 0 1px #dddfc9; }
+#preview-wrap { position:relative; width:100%; aspect-ratio:16/9; background:#fffdf6; border:4px solid #fffdf3; border-radius:22px; overflow:hidden; box-shadow:0 12px 35px #57634712,0 0 0 1px #dddfc9; }
 iframe { display:block; width:100%; height:100%; border:0; }
 #edit-overlay { position:absolute; inset:0; pointer-events:none; }
 .image-hit { position:absolute; pointer-events:auto; touch-action:none; cursor:crosshair; }
@@ -124,3 +124,21 @@ footer .below { margin:0 auto 10px; max-width:1000px; text-align:left; padding:0
 .stage-expanded .workspace{position:fixed;inset:76px 0 0;z-index:20;padding:10px 16px;background:var(--paper);align-items:center;justify-content:center;overflow:auto}
 .stage-expanded #preview-wrap{width:min(100%,calc((100dvh - 100px)*var(--stage-ratio,1.333333)));flex:none}
 .stage-expanded main{display:block;min-height:100dvh}
+
+/* Compact desktop editor: independent settings scroll and proportional stage. */
+@media(min-width:721px){
+ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+ header{padding:8px 16px;gap:12px;flex:none}
+ .brand img{width:60px;height:40px}.brand span{font-size:20px}.brand small{margin-top:3px;font-size:10px}
+ .actions{gap:6px}button{min-height:34px;padding:7px 10px}
+ .toolbar{padding:7px 16px;gap:8px;flex:none}.toolbar select{padding:7px}
+ main{flex:1;min-height:0;grid-template-columns:126px 264px minmax(0,1fr);overflow:hidden;align-items:stretch}
+ nav,aside{position:static;height:100%;max-height:100%;overflow-y:auto}
+ nav{padding:10px 7px}nav button{margin-bottom:4px;padding:8px 7px;font-size:12px}
+ aside{padding:14px 13px}h2{font-size:21px}h3{margin:17px 0 9px}label{margin:12px 0 5px}
+ input:not([type=checkbox]):not([type=color]),textarea,select{padding:8px}.help{margin-bottom:12px}
+ .workspace{height:100%;padding:12px;align-items:center;justify-content:center;container-type:size}
+ #preview-wrap{width:min(100%,calc(100cqh * var(--stage-ratio,1.777778)));flex:none;border-radius:14px;border-width:3px}
+ footer{padding:7px 16px;flex:none}footer .below{margin-bottom:3px}.version-label{margin-bottom:2px}
+}
+@media(min-width:721px) and (max-width:950px){main{grid-template-columns:108px 236px minmax(0,1fr)}.brand small{display:none}.brand span{font-size:17px}}
