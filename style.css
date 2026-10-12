@@ -142,3 +142,5 @@ footer .below { margin:0 auto 10px; max-width:1000px; text-align:left; padding:0
  footer{padding:7px 16px;flex:none}footer .below{margin-bottom:3px}.version-label{margin-bottom:2px}
 }
 @media(min-width:721px) and (max-width:950px){main{grid-template-columns:108px 236px minmax(0,1fr)}.brand small{display:none}.brand span{font-size:17px}}
+
+.stage-expanded .workspace{height:auto}
