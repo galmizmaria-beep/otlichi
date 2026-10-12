@@ -19,7 +19,7 @@ header { display:flex; align-items:center; justify-content:space-between; gap:28
 .brand small { display:block; margin-top:6px; font:11px "Trebuchet MS",sans-serif; letter-spacing:1.3px; color:#92937b; }
 .actions { display:flex; gap:10px; flex-wrap:wrap; }
 .actions button { font-size:12px; }
-main { display:grid; grid-template-columns:174px 316px minmax(0,1fr); align-items:start; min-height:calc(100dvh - 139px); }
+main { display:grid; grid-template-columns:148px 286px minmax(0,1fr); align-items:start; min-height:calc(100dvh - 139px); }
 nav { position:sticky; top:0; height:calc(100dvh - 16px); overflow-y:auto; padding:22px 12px; background:#e9ecdcd9; }
 nav button { display:block; width:100%; padding:12px 10px; text-align:left; margin-bottom:9px; background:transparent; border-color:transparent; font-size:13px; }
 nav button.active { background:#fffdf3; color:#63794e; box-shadow:0 4px 12px #56634c10; border-color:#d9dec9; font-weight:bold; }
@@ -39,13 +39,13 @@ input[type=checkbox] { accent-color:var(--accent); width:18px; height:18px; }
 textarea { min-height:85px; resize:vertical; line-height:1.5; }
 aside button { max-width:100%; margin:9px 7px 0 0; }
 aside img { max-width:100%; max-height:110px; object-fit:contain; display:block; border-radius:12px; margin-top:10px; }
-.workspace { padding:24px 30px 35px; min-width:0; }
+.workspace { padding:12px 14px 20px; min-width:0; }
 .toolbar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-bottom:16px; }
 .toolbar strong { font-size:14px; }
 .preview-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
 .toolbar select { width:auto; max-width:170px; }
 .toolbar button { font-size:12px; }
-#preview-wrap { position:relative; width:100%; aspect-ratio:16/9; background:#fffdf6; border:8px solid #fffdf3; border-radius:22px; overflow:hidden; box-shadow:0 12px 35px #57634712,0 0 0 1px #dddfc9; }
+#preview-wrap { position:relative; width:100%; aspect-ratio:4/3; background:#fffdf6; border:4px solid #fffdf3; border-radius:22px; overflow:hidden; box-shadow:0 12px 35px #57634712,0 0 0 1px #dddfc9; }
 iframe { display:block; width:100%; height:100%; border:0; }
 #edit-overlay { position:absolute; inset:0; pointer-events:none; }
 .image-hit { position:absolute; pointer-events:auto; touch-action:none; cursor:crosshair; }
@@ -85,13 +85,13 @@ dialog button { margin:8px 9px 0 0; }
 .dialog-actions button { margin:0; }
 #code { height:240px; margin-bottom:14px; font:11px/1.5 monospace; }
 @media(max-width:1180px) {
- main { grid-template-columns:154px 290px minmax(0,1fr); }
+ main { grid-template-columns:132px 266px minmax(0,1fr); }
  .workspace { padding:20px; }
  header { gap:15px; padding:14px 20px; }
  .brand span { font-size:20px; }
 }
 @media(max-width:900px) {
- main { grid-template-columns:130px 270px minmax(0,1fr); }
+ main { grid-template-columns:116px 250px minmax(0,1fr); }
  nav { padding:16px 8px; }
  nav button { padding:11px 7px; font-size:12px; }
  aside { padding:20px 16px; }
@@ -115,6 +115,12 @@ dialog button { margin:8px 9px 0 0; }
 }
 @media(prefers-reduced-motion:reduce) { * { transition:none!important; } }
 .toolbar { margin:0; padding:12px 28px; background:#fffdf3; border-bottom:1px solid var(--line); }
-.workspace { display:flex; align-items:flex-start; padding-top:24px; }
+.workspace { display:flex; align-items:flex-start; padding-top:12px; }
 footer .below { margin:0 auto 10px; max-width:1000px; text-align:left; padding:0; }
 .version-label { display:inline-block; margin:0 0 8px; color:#63794e; font-weight:bold; }
+
+.stage-expanded header,.stage-expanded nav,.stage-expanded aside,.stage-expanded footer{display:none}
+.stage-expanded .toolbar{position:fixed;inset:0 0 auto;z-index:30;min-height:64px}
+.stage-expanded .workspace{position:fixed;inset:76px 0 0;z-index:20;padding:10px 16px;background:var(--paper);align-items:center;justify-content:center;overflow:auto}
+.stage-expanded #preview-wrap{width:min(100%,calc((100dvh - 100px)*var(--stage-ratio,1.333333)));flex:none}
+.stage-expanded main{display:block;min-height:100dvh}
