@@ -48,8 +48,9 @@ aside img { max-width:100%; max-height:110px; object-fit:contain; display:block;
 #preview-wrap { position:relative; width:100%; aspect-ratio:16/9; background:#fffdf6; border:4px solid #fffdf3; border-radius:22px; overflow:hidden; box-shadow:0 12px 35px #57634712,0 0 0 1px #dddfc9; }
 iframe { display:block; width:100%; height:100%; border:0; }
 #edit-overlay { position:absolute; inset:0; pointer-events:none; }
-.image-hit { position:absolute; pointer-events:auto; touch-action:none; cursor:crosshair; }
+.image-hit { position:absolute; pointer-events:auto; touch-action:none; cursor:move; }
 .zone { position:absolute; border:2px dashed #688551; background:#799c631a; pointer-events:none; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; }
+.zone.selected { border-color:#128f66; background:#128f662b; box-shadow:0 0 0 2px #ffffffaa; }
 .zone span { background:#688551; border-radius:50%; padding:3px 6px; }
 .object { position:absolute; border:2px dashed #688551; pointer-events:auto; cursor:move; touch-action:none; }
 .object.locked { pointer-events:none; border:none; }
