@@ -14,6 +14,7 @@ async function optimize(project){
  const refs=[];for(const key of ['a','b'])if(copy.images[key])refs.push([copy.images[key],'source']);
  refs.push([copy.boardStyle,'image'],[copy.titleScreen,'image'],[copy.titleScreen,'logo'],[copy.taskStyle,'image'],[copy.hud,'lifeAsset'],[copy.finalScreens.win,'image'],[copy.finalScreens.lose,'image']);
  copy.assets=copy.assets.filter(a=>a.visible&&(copy.titleScreen.enabled||a.screen!=='title'));
+ for(const t of copy.tasks)refs.push([t,'questionImage']);
  for(const a of copy.assets)refs.push([a,'source']);
  const cache=new Map();for(const [obj,key] of refs){const source=obj[key];if(!source)continue;if(!cache.has(source))cache.set(source,await compressPicture(source));obj[key]=cache.get(source)}
  return copy;
