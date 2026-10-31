@@ -31,17 +31,3 @@ Precise object edit: image B for spot-the-difference. Preserve exact original 3:
 ### Декор интерфейса
 
 Use case illustration-story. Asset type transparent PNG decorative illustration for a cosy children's drawing studio web editor. A small charming bundle of three colored pencils (sage green, dusty rose and mustard), two natural wooden paintbrushes with soft bristles, a tiny watercolor palette and a few sprigs with small peach blossoms, gracefully arranged horizontally like a vignette. Hand-painted gouache and colored pencil paper texture, warm muted storybook style, gentle joyful character, imperfect organic edges. Wide short composition with generous transparent margins. Real transparent background, no opaque paper rectangle, no shadows outside objects. No words, no logos, no watermark, no UI controls.
-
-## Праздничная библиотека
-
-Новые пары созданы встроенным ImageGen; точные запросы сохранены в [library/holiday-prompts.json](library/holiday-prompts.json). Каждая генерация содержит две квадратные панели, которые извлечены в отдельные JPEG 887×887 с помощью sips. Содержание изображений при подготовке файлов не дорисовывалось.
-
-| Файлы A / B в `library/` | Сюжет | Рекомендуемый возраст | Областей |
-| --- | --- | --- | --- |
-| `halloween-a.jpg`, `halloween-b.jpg` | Тайны старой библиотеки | 10+, подростки и взрослые | 5 |
-| `new-year-a.jpg`, `new-year-b.jpg` | Зимняя площадь | 6+, семейная игра | 5 |
-| `march-8-a.jpg`, `march-8-b.jpg` | Весенняя мастерская | 12+, подростки и взрослые | 4 |
-| `february-23-a.jpg`, `february-23-b.jpg` | Курс на спасение | 8+, школьники и подростки | 5 |
-| `victory-day-a.jpg`, `victory-day-b.jpg` | Память поколений | 12+, подростки и взрослые | 5 |
-
-Возраст — ориентир для выбора сюжета, сложность вопросов задаёт автор. Разметка отмечает проверенные крупные отличия; из-за генерации в парах встречаются небольшие вариации текстуры и деталей. В паре к 8 Марта размечены четыре явно различимых изменения. Исходные пары forest и studio сохранены без изменения. Выбор новой пары требует подтверждения замены текущих картинок, разметки и заданий и поддерживает отмену.
