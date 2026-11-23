@@ -56,29 +56,27 @@ test('changing picture scale updates only the selected picture and preserves the
  const bg=g.host.querySelector('.screen-backdrop');
  const [a,b]=g.host.querySelectorAll('.image-inner');
  const originalWidth=Number.parseFloat(a.style.width);
- g.message({type:'dg-picture-size',ratio:'original',scale:50,scaleB:75,sync:false});
+ g.message({type:'dg-picture-size',scale:50,scaleB:75,sync:false});
  assert.equal(g.host.querySelector('.screen-backdrop'),bg);
  assert.equal(Number.parseFloat(a.style.width),originalWidth*.5);
  assert.equal(Number.parseFloat(b.style.width),originalWidth*.75);
 });
 
 
-test('pictures retain their original ratios inside the chosen frame with the game background fixed',()=>{
+test('pictures keep their original ratios while resizing on a fixed game background',()=>{
  const g=setup();
  g.p.images.a={source:'data:image/png;base64,a',naturalWidth:1600,naturalHeight:900};
  g.p.images.b={source:'data:image/png;base64,b',naturalWidth:900,naturalHeight:1600};
  g.context.mountGame(g.p,'edit','game');
  const bg=g.host.querySelector('.screen-backdrop');
  const aspectRatio=g.host.style.aspectRatio;
- g.message({type:'dg-picture-size',ratio:'4/3',scale:100,scaleB:100,sync:true});
+ const originalSizes=g.host.querySelectorAll('.image-inner').map(pic=>[parseFloat(pic.style.width),parseFloat(pic.style.height)]);
+ g.message({type:'dg-picture-size',scale:80,scaleB:80,sync:true});
  for(const [index,pic] of g.host.querySelectorAll('.image-inner').entries()){
-  const frame=pic.parentElement;
   const width=Number.parseFloat(pic.style.width),height=Number.parseFloat(pic.style.height);
-  const frameWidth=Number.parseFloat(frame.style.width),frameHeight=Number.parseFloat(frame.style.height);
-  assert.equal(frameWidth/frameHeight,4/3);
   assert.ok(Math.abs(width/height-(index===0?16/9:9/16))<1e-9);
-  assert.ok(width<=frameWidth+1e-9&&height<=frameHeight+1e-9);
-  assert.ok(Math.min(Math.abs(width-frameWidth),Math.abs(height-frameHeight))<1e-9);
+  assert.ok(Math.abs(width-originalSizes[index][0]*.8)<1e-9);
+  assert.ok(Math.abs(height-originalSizes[index][1]*.8)<1e-9);
  }
  assert.equal(g.host.querySelector('.screen-backdrop'),bg);
  assert.equal(g.host.style.aspectRatio,aspectRatio);
