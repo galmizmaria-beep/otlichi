@@ -63,15 +63,22 @@ test('changing picture scale updates only the selected picture and preserves the
 });
 
 
-test('both pictures adapt to a chosen ratio while the game background stays fixed',()=>{
+test('pictures retain their original ratios inside the chosen frame with the game background fixed',()=>{
  const g=setup();
- g.p.images.a=g.p.images.b={source:'data:image/png;base64,a',naturalWidth:1600,naturalHeight:900};
+ g.p.images.a={source:'data:image/png;base64,a',naturalWidth:1600,naturalHeight:900};
+ g.p.images.b={source:'data:image/png;base64,b',naturalWidth:900,naturalHeight:1600};
  g.context.mountGame(g.p,'edit','game');
  const bg=g.host.querySelector('.screen-backdrop');
  const aspectRatio=g.host.style.aspectRatio;
  g.message({type:'dg-picture-size',ratio:'4/3',scale:100,scaleB:100,sync:true});
- for(const pic of g.host.querySelectorAll('.image-inner')){
-  assert.equal(Number.parseFloat(pic.style.width)/Number.parseFloat(pic.style.height),4/3);
+ for(const [index,pic] of g.host.querySelectorAll('.image-inner').entries()){
+  const frame=pic.parentElement;
+  const width=Number.parseFloat(pic.style.width),height=Number.parseFloat(pic.style.height);
+  const frameWidth=Number.parseFloat(frame.style.width),frameHeight=Number.parseFloat(frame.style.height);
+  assert.equal(frameWidth/frameHeight,4/3);
+  assert.ok(Math.abs(width/height-(index===0?16/9:9/16))<1e-9);
+  assert.ok(width<=frameWidth+1e-9&&height<=frameHeight+1e-9);
+  assert.ok(Math.min(Math.abs(width-frameWidth),Math.abs(height-frameHeight))<1e-9);
  }
  assert.equal(g.host.querySelector('.screen-backdrop'),bg);
  assert.equal(g.host.style.aspectRatio,aspectRatio);
