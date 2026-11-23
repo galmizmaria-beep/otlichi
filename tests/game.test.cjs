@@ -81,3 +81,17 @@ test('pictures keep their original ratios while resizing on a fixed game backgro
  assert.equal(g.host.querySelector('.screen-backdrop'),bg);
  assert.equal(g.host.style.aspectRatio,aspectRatio);
 });
+
+test('hints follow the visible picture when switching from A to B and back',()=>{
+ const g=setup();
+ g.p.images.layout='toggle';
+ g.run();
+ for(const visible of [1,0]){
+  g.host.querySelector('#toggle').click();
+  g.host.querySelector('#hint').click();
+  const pictures=g.host.querySelectorAll('.image-inner');
+  assert.ok(pictures[visible].querySelector('.hint'));
+  assert.equal(pictures[1-visible].querySelector('.hint'),null);
+  assert.ok(g.host.querySelector('.hud').innerHTML.includes('Подсказка '+(visible+1)));
+ }
+});
