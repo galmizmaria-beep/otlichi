@@ -45,5 +45,19 @@ test('oral explanation can be revealed in editor preview without completing the 
 test('question illustration renders in task dialog and legacy tasks render without an image',()=>{for(const source of ['', 'data:image/gif;base64,AAAA']){const g=setup();g.p.tasks[0].questionImage=source;g.p.tasks[0].questionImageAlt='Question illustration';g.run();g.click();const img=g.host.querySelector('.question-image');if(source){assert.ok(img);assert.equal(img.attrs.src,source);assert.equal(img.attrs.alt,'Question illustration')}else assert.equal(img,null);g.answer();g.flush();assert.ok(g.host.innerHTML.includes('Прекрасная работа!'))}});
 
 
-test('final windows preserve the board with independent transparent backgrounds only after completion',()=>{for(const outcome of ['win','lose','timeup']){const g=setup();const cfg=g.p.finalScreens[outcome==='timeup'?'lose':outcome];Object.assign(cfg,{background:'#abcdef',backgroundOpacity:25,image:'data:image/gif;base64,AAAA',glow:22,glowColor:'#123456'});g.p.hud.lives=1;if(outcome==='timeup'){g.p.hud.timer='countdown';g.p.hud.seconds=1}g.run();assert.equal(g.host.querySelector('.final-window'),null);if(outcome==='timeup')g.intervals[0]();else{g.click();g.answer(outcome==='win'?0:1);g.flush()}assert.ok(g.host.querySelector('.board'));const dialog=g.host.querySelector('.final-window');assert.ok(dialog);assert.equal(dialog.attrs.role,'dialog');assert.ok(dialog.attrs.style.includes('22px #123456'));const bg=dialog.querySelector('.screen-backdrop');assert.ok(bg.attrs.style.includes('opacity:0.25'));assert.ok(bg.attrs.style.includes('data:image/gif;base64,AAAA'));assert.equal(g.host.querySelector('.modal'),null);g.host.querySelector('#start').click();assert.equal(g.host.querySelector('.final-window'),null);assert.ok(g.host.querySelector('.board'))}});
+test('final windows preserve the board with independent transparent backgrounds only after completion',()=>{for(const outcome of ['win','lose','timeup']){const g=setup();const cfg=g.p.finalScreens[outcome==='timeup'?'lose':outcome];Object.assign(cfg,{background:'#abcdef',backgroundOpacity:25,image:'data:image/gif;base64,AAAA',glow:22,glowColor:'#123456'});g.p.hud.lives=1;if(outcome==='timeup'){g.p.hud.timer='countdown';g.p.hud.seconds=1}g.run();assert.equal(g.host.querySelector('.final-window'),null);if(outcome==='timeup')g.intervals[0]();else{g.click();g.answer(outcome==='win'?0:1);g.flush()}assert.ok(g.host.querySelector('.board'));const dialog=g.host.querySelector('.final-window');assert.ok(dialog);assert.equal(dialog.attrs.role,'dialog');assert.ok(dialog.attrs.style.includes('22px #123456'));const bg=dialog.querySelector('.screen-backdrop');assert.ok(bg.attrs.style.includes('opacity:0.25'));assert.ok(!bg.attrs.style.includes('background-image'));const center=dialog.querySelector('.center');assert.equal(center.children[0].attrs.src,cfg.image);assert.equal(center.children[1].tagName,'H1');assert.equal(g.host.querySelector('.modal'),null);g.host.querySelector('#start').click();assert.equal(g.host.querySelector('.final-window'),null);assert.ok(g.host.querySelector('.board'))}});
 test('legacy full-screen ending remains available without a game layer',()=>{const g=setup();g.p.finalScreens.overlay=false;g.run();g.click();g.answer();g.flush();assert.equal(g.host.querySelector('.board'),null);assert.equal(g.host.querySelector('.final-window'),null);assert.ok(g.host.querySelector('.center'))});
+
+
+test('changing picture scale updates only the selected picture and preserves the game background',()=>{
+ const g=setup();
+ g.p.boardStyle.image='data:image/gif;base64,AAAA';
+ g.context.mountGame(g.p,'edit','game');
+ const bg=g.host.querySelector('.screen-backdrop');
+ const [a,b]=g.host.querySelectorAll('.image-inner');
+ const originalWidth=Number.parseFloat(a.style.width);
+ g.message({type:'dg-picture-scale',scale:50,scaleB:75,sync:false});
+ assert.equal(g.host.querySelector('.screen-backdrop'),bg);
+ assert.equal(Number.parseFloat(a.style.width),originalWidth*.5);
+ assert.equal(Number.parseFloat(b.style.width),originalWidth*.75);
+});
